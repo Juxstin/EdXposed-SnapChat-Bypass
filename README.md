@@ -8,6 +8,7 @@ w / anti sc bans
 
 - Android Oreo (8.0, 8.1) 
 - Android Pie (9.0)
+- Android Q (10.0)
 
 For devices with Android 7.x and lower, original Xposed is strongly recommended.
 
