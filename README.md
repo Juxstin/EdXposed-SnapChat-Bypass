@@ -28,7 +28,7 @@ CHECK Build requirements ABOVE
 
 ## Install
 
-1. Install Magisk v19.0+.
+1. Install Magisk v19.0+ (for latest EdXposed or Huawei devices, use our custom Magisk: Change Magisk update channel to [this](http://edxp.meowcat.org/repo/version.json)).
 2. Install [Riru-Core](https://github.com/RikkaApps/Riru/releases) v19+ from Magisk repo.
 3. Download [EdXposed](https://github.com/solohsu/EdXposed/releases) and install it in Magisk Manager or recovery mode.
 4. Install companion application.
