@@ -11,6 +11,8 @@ ARCH=`getprop ro.product.cpu.abi`
 DEVICE=`getprop ro.product.device`
 ANDROID=`getprop ro.build.version.release`
 BUILD=`getprop ro.build.id`
+MAGISKV=`su -v`
+MAGISKC=`su -V`
 
 setup_log_path () {
   EDXP_INSTALLER=com.solohsu.android.edxp.manager
@@ -75,11 +77,12 @@ start_log_cather () {
   echo "Manufacture: ${MANUFACTURE}">>${LOG_FILE}
   echo "Brand: ${BRAND}">>${LOG_FILE}
   echo "Product: ${PRODUCT}">>${LOG_FILE}
+  echo "Magisk: ${MAGISKV}(${MAGISKC})">>${LOG_FILE}
   logcat -f ${LOG_FILE} *:S ${LOG_TAG_FILTERS} &
 }
 
 start_verbose_log_catcher () {
-  start_log_cather all.log "EdXposed:V XSharedPreferences:V EdXposed-Bridge:V EdXposed-Manager:V XposedInstaller:V" true ${LOG_VERBOSE}
+  start_log_cather all.log "EdXposed:V XSharedPreferences:V EdXposed-Bridge:V EdXposedManager:V XposedInstaller:V" true ${LOG_VERBOSE}
 }
 
 start_bridge_log_catcher () {
