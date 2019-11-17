@@ -8,6 +8,7 @@ w / anti sc bans
 
 - Android Oreo (8.0, 8.1) 
 - Android Pie (9.0)
+- Android Q (10.0)
 
 For devices with Android 7.x and lower, original Xposed is strongly recommended.
 
@@ -27,7 +28,7 @@ CHECK Build requirements ABOVE
 
 ## Install
 
-1. Install Magisk v19.0+.
+1. Install Magisk v19.0+ (for latest EdXposed or Huawei devices, use our custom Magisk: Change Magisk update channel to [this](http://edxp.meowcat.org/repo/version.json)).
 2. Install [Riru-Core](https://github.com/RikkaApps/Riru/releases) v19+ from Magisk repo.
 3. Download [EdXposed](https://github.com/solohsu/EdXposed/releases) and install it in Magisk Manager or recovery mode.
 4. Install companion application.
