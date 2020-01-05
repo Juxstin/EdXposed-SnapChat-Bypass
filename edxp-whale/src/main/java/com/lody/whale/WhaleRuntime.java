@@ -65,7 +65,7 @@ public class WhaleRuntime {
     public static native Object cloneToSubclassNative(Object object, Class<?> subClass);
 
     public static native void removeFinalFlagNative(Class<?> cl);
-
+    
     private static native void reserved0();
 
     private static native void reserved1();
