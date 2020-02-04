@@ -46,9 +46,11 @@ CHECK Build requirements ABOVE
 - May not be compatible with all ART devices.
 - File access services are not implemented yet, now EdXp simply uses magiskpolicy to enable needed SELinux policies.
 
+## Sponsored
+- My discord: [Join Discord](https://discord.gg/TDqWmEa)
+
 ## Get help
 - GitHub issues (recommended): [Issues](https://github.com/Juxstin/EdXposed-SnapChat-Bypass/issues/)
-- My discord: [Join Discord](https://discord.gg/ux2paNu)
 
 ## Contribute
 
