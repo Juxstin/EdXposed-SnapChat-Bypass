@@ -4,7 +4,7 @@ import org.gradle.internal.os.OperatingSystem
 apply plugin: 'com.android.library'
 
 // Values set here will be overriden by AppVeyor, feel free to modify during development.
-def buildVersionName = 'v0.4.6.2'
+def buildVersionName = 'v0.4.6.5 (Justins Fork)'
 def buildVersionCode = 233
 
 if (System.env.APPVEYOR_BUILD_VERSION != null) {
@@ -28,9 +28,9 @@ ext {
     yahfa_module_id = "riru_edxposed"
     sandhook_module_id = yahfa_module_id + "_sandhook"
     whale_module_id = yahfa_module_id + "_whale"
-    yahfa_authors = "solohsu, MlgmXyysd & rk700"
-    sandhook_authors = "solohsu, MlgmXyysd & ganyao114"
-    whale_authors = "solohsu, MlgmXyysd & asLody"
+    yahfa_authors = "solohsu, MlgmXyysd & rk700 & Juxstin"
+    sandhook_authors = "solohsu, MlgmXyysd & ganyao114 & Juxstin"
+    whale_authors = "solohsu, MlgmXyysd & asLody & Juxstin"
 
     riruModuleId = "edxp"
     zipPathMagiskRelease = "$buildDir/tmp/release/magisk"
