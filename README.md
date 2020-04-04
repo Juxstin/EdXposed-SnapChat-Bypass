@@ -1,6 +1,6 @@
 # EdXposed-SnapChat-Bypass
 
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/R6R11CS1Q)
+[![BTC](https://cdn.discordapp.com/attachments/622269191344357386/696088326322651236/heart.png)](https://shoppy.gg/product/14JT5da)
 
 A Riru module trying to provide a ART hooking framework (initially for Android Pie) which delivers consistent APIs with the OG Xposed, leveraging YAHFA (or SandHook) hooking framework.
 
@@ -68,4 +68,4 @@ CHECK Build requirements ABOVE
 - [SandHook](https://github.com/ganyao114/SandHook/): ART hooking framework for SandHook variant
 - [Justin](https://github.com/Juxstin): Bypassing SC detection
 
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/R6R11CS1Q)
+[![BTC](https://cdn.discordapp.com/attachments/622269191344357386/696088326322651236/heart.png)](https://shoppy.gg/product/14JT5da)
