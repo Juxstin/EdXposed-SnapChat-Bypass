@@ -10,7 +10,6 @@ namespace edxp {
 
     static constexpr const char *kPrimaryInstallerPkgName = "org.meowcat.edxposed.manager";
     static constexpr const char *kLegacyInstallerPkgName = "de.robv.android.xposed.installer";
-    static constexpr auto kXposedPropPath = "/system/framework/edconfig.jar";
 
     class ConfigManager {
     public:
@@ -32,23 +31,13 @@ namespace edxp {
 
         bool IsNoModuleLogEnabled() const;
 
-        std::string GetInstallerPackageName() const;
+        std::string GetInstallerPkgName() const;
 
-        std::string GetXposedPropPath() const;
-
-        std::string GetLibSandHookName() const;
-
-        std::string GetLibWhaleName() const;
-
-        std::string GetDataPathPrefix() const;
-
-        std::string GetConfigPath(const std::string &suffix) const;
-
-        bool IsAppNeedHook(const std::string &app_data_dir);
+        bool IsAppNeedHook(const std::string &app_data_dir) const;
 
     private:
         inline static ConfigManager *instance_;
-        uid_t last_user_ = false;
+        bool initialized_ = false;
         bool use_prot_storage_ = true;
         std::string data_path_prefix_;
         std::string installer_pkg_name_;
@@ -68,12 +57,17 @@ namespace edxp {
 
         ConfigManager();
 
-        void UpdateConfigPath(const uid_t user);
+        ~ConfigManager();
+
+        void InitOnce();
 
         void SnapshotBlackWhiteList();
 
         std::string RetrieveInstallerPkgName() const;
+
+        std::string GetConfigPath(const std::string &suffix) const;
     };
+
 
 } // namespace edxp
 

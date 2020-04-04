@@ -2,17 +2,9 @@ package com.elderdrivers.riru.edxp.config;
 
 public interface EdxpConfig {
 
-    String getInstallerConfigPath(String suffix);
+    String getInstallerBaseDir();
 
-    String getDataPathPrefix();
-
-    String getInstallerPackageName();
-
-    String getXposedPropPath();
-
-    String getLibSandHookName();
-
-    String getLibWhaleName();
+    String getBlackListModulePackageName();
 
     boolean isDynamicModulesMode();
 

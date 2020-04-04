@@ -5,9 +5,7 @@ import android.os.Process;
 import android.os.Trace;
 import android.util.Log;
 
-import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.util.ClassLoaderUtils;
-import com.elderdrivers.riru.edxp.util.FileUtils;
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.SandHookConfig;
 import com.swift.sandhook.blacklist.HookBlackList;
@@ -16,6 +14,7 @@ import com.swift.sandhook.xposedcompat.XposedCompat;
 import com.swift.sandhook.xposedcompat.hookstub.HookMethodEntity;
 import com.swift.sandhook.xposedcompat.hookstub.HookStubManager;
 import com.swift.sandhook.xposedcompat.utils.DexLog;
+import com.swift.sandhook.xposedcompat.utils.FileUtils;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -134,11 +133,9 @@ public final class SandHookXposedBridge {
 
     public static void init() {
         if (Process.is64Bit()) {
-//            SandHookConfig.libSandHookPath = "/system/lib64/libsandhook.edxp.so";
-            SandHookConfig.libSandHookPath = "/system/lib64/" + ConfigManager.getLibSandHookName();
+            SandHookConfig.libSandHookPath = "/system/lib64/libsandhook.edxp.so";
         } else {
-//            SandHookConfig.libSandHookPath = "/system/lib/libsandhook.edxp.so";
-            SandHookConfig.libSandHookPath = "/system/lib/" + ConfigManager.getLibSandHookName();
+            SandHookConfig.libSandHookPath = "/system/lib/libsandhook.edxp.so";
         }
         SandHookConfig.libLoader = new SandHookConfig.LibLoader() {
             @Override

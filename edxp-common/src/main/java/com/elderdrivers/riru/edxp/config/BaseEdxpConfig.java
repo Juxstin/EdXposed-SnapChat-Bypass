@@ -1,35 +1,17 @@
 package com.elderdrivers.riru.edxp.config;
 
-import android.text.TextUtils;
+import com.elderdrivers.riru.edxp.hooker.XposedBlackListHooker;
 
 public class BaseEdxpConfig implements EdxpConfig {
 
     @Override
-    public String getInstallerConfigPath(String suffix) {
-        return ConfigManager.getInstallerConfigPath(suffix != null ? suffix : "");
+    public String getInstallerBaseDir() {
+        return InstallerChooser.INSTALLER_DATA_BASE_DIR;
     }
 
     @Override
-    public String getDataPathPrefix() {
-        return ConfigManager.getDataPathPrefix();
-    }
-
-    @Override
-    public String getInstallerPackageName() {
-        return ConfigManager.getInstallerPackageName();
-    }
-
-    @Override
-    public String getXposedPropPath() {
-        return ConfigManager.getXposedPropPath();
-    }
-    @Override
-    public String getLibSandHookName() {
-        return ConfigManager.getLibSandHookName();
-    }
-    @Override
-    public String getLibWhaleName() {
-        return ConfigManager.getLibWhaleName();
+    public String getBlackListModulePackageName() {
+        return XposedBlackListHooker.BLACK_LIST_PACKAGE_NAME;
     }
 
     @Override
@@ -41,7 +23,6 @@ public class BaseEdxpConfig implements EdxpConfig {
     public boolean isResourcesHookEnabled() {
         return ConfigManager.isResourcesHookEnabled();
     }
-
     @Override
     public boolean isNoModuleLogEnabled() {
         return ConfigManager.isNoModuleLogEnabled();

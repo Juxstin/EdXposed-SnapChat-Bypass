@@ -24,8 +24,6 @@ import de.robv.android.xposed.services.FileResult;
  * This class is basically the same as SharedPreferencesImpl from AOSP, but
  * read-only and without listeners support. Instead, it is made to be
  * compatible with all ROMs.
- *
- * @deprecated in Android Pie or later was lost by Google, will not remove
  */
 public final class XSharedPreferences implements SharedPreferences {
 	private static final String TAG = "XSharedPreferences";
@@ -130,11 +128,11 @@ public final class XSharedPreferences implements SharedPreferences {
 				map = mMap;
 			}
 		} catch (XmlPullParserException e) {
-			Log.w(TAG, "getSharedPreferences failed for: " + mFilename, e);
+			Log.w(TAG, "getSharedPreferences", e);
 		} catch (FileNotFoundException ignored) {
 			// SharedPreferencesImpl has a canRead() check, so it doesn't log anything in case the file doesn't exist
 		} catch (IOException e) {
-			Log.w(TAG, "getSharedPreferences failed for: " + mFilename, e);
+			Log.w(TAG, "getSharedPreferences", e);
 		} finally {
 			if (result != null && result.stream != null) {
 				try {

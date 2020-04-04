@@ -1,5 +1,0 @@
-version=91.0-v0.4.6.6 (Justins Fork) (YAHFA)
-arch=arm64
-minsdk=26
-maxsdk=29
-requires:fbe_aware=1

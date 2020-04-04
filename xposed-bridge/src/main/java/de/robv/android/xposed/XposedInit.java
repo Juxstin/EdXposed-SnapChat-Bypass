@@ -10,6 +10,7 @@ import android.content.res.XResources;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Process;
+import android.text.TextUtils;
 import android.util.ArraySet;
 import android.util.Log;
 
@@ -312,7 +313,7 @@ public final class XposedInit {
             return false;
         }
         synchronized (moduleLoadLock) {
-            final String filename = EdXpConfigGlobal.getConfig().getInstallerConfigPath("modules.list");
+            final String filename = EdXpConfigGlobal.getConfig().getInstallerBaseDir() + "conf/modules.list";
             BaseService service = SELinuxHelper.getAppDataFileService();
             if (!service.checkFileExists(filename)) {
                 Log.e(TAG, "Cannot load any modules because " + filename + " was not found");
@@ -397,6 +398,14 @@ public final class XposedInit {
      */
     private static boolean loadModule(String apk, ClassLoader topClassLoader, boolean callInitZygote) {
         Log.i(TAG, "Loading modules from " + apk);
+
+        // todo remove this legacy logic
+        String blackListModulePackageName = EdXpConfigGlobal.getConfig().getBlackListModulePackageName();
+        if (!TextUtils.isEmpty(apk) && !TextUtils.isEmpty(blackListModulePackageName)
+                && apk.contains(blackListModulePackageName)) {
+            Log.i(TAG, "We are going to take over black list's job...");
+            return false;
+        }
 
         if (!new File(apk).exists()) {
             Log.e(TAG, "  File does not exist");

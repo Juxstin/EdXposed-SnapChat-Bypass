@@ -1,8 +1,6 @@
-package com.elderdrivers.riru.edxp.util;
+package com.swift.sandhook.xposedcompat.utils;
 
-import android.annotation.SuppressLint;
 import android.os.Build;
-import android.os.Process;
 import android.text.TextUtils;
 
 import java.io.BufferedReader;
@@ -11,8 +9,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import static com.elderdrivers.riru.edxp.util.ProcessUtils.PER_USER_RANGE;
 
 public class FileUtils {
 
@@ -59,13 +55,13 @@ public class FileUtils {
             writer.write(line);
             writer.flush();
         } catch (Throwable throwable) {
-            Utils.logE("error writing line to file " + file + ": " + throwable.getMessage());
+            DexLog.e("error writing line to file " + file + ": " + throwable.getMessage());
         }
     }
 
     public static String getPackageName(String dataDir) {
         if (TextUtils.isEmpty(dataDir)) {
-            Utils.logE("getPackageName using empty dataDir");
+            DexLog.e("getPackageName using empty dataDir");
             return "";
         }
         int lastIndex = dataDir.lastIndexOf("/");
@@ -75,11 +71,7 @@ public class FileUtils {
         return dataDir.substring(lastIndex + 1);
     }
 
-    // FIXME: Although multi-users is considered here, but compat mode doesn't support other users' apps on Oreo and later yet.
-    @SuppressLint("SdCardPath")
     public static String getDataPathPrefix() {
-        int userId = Process.myUid() / PER_USER_RANGE;
-        String format = IS_USING_PROTECTED_STORAGE ? "/data/user_de/%d/" : "/data/user/%d/";
-        return String.format(format, userId);
+        return IS_USING_PROTECTED_STORAGE ? "/data/user_de/0/" : "/data/data/";
     }
 }
