@@ -1,6 +1,9 @@
 SKIPUNZIP=1
 
 RIRU_PATH="/data/misc/riru"
+RIRU_EDXP="$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-4)"
+RIRU_MODULES="${RIRU_PATH}/modules"
+RIRU_TARGET="${RIRU_MODULES}/${RIRU_EDXP}"
 
 VERSION=$(grep_prop version "${TMPDIR}/module.prop")
 RIRU_MIN_API_VERSION=$(grep_prop api "${TMPDIR}/module.prop")
@@ -10,6 +13,14 @@ PROP_DEVICE=$(getprop ro.product.device)
 PROP_PRODUCT=$(getprop ro.build.product)
 PROP_BRAND=$(getprop ro.product.brand)
 PROP_MANUFACTURER=$(getprop ro.product.manufacturer)
+
+JAR_EDXP=$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-8)".jar"
+JAR_EDDALVIKDX=$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-8)".jar"
+JAR_EDDEXMAKER=$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-8)".jar"
+JAR_EDCONFIG=$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-8)".jar"
+LIB_RIRU_EDXP="libriru_${RIRU_EDXP}.so"
+LIB_WHALE_EDXP="lib$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-10).so"
+LIB_SANDHOOK_EDXP="lib$(cat /proc/sys/kernel/random/uuid|md5sum|cut -c 1-13).so"
 
 MODEL="
 HD1900
@@ -113,27 +124,27 @@ check_old_magisk_device() {
 
 check_magisk_version() {
     for TARGET in ${MODEL}; do
-        if [[ "${PROP_MODEL}" == ${TARGET} ]]; then
+        if [[ "${PROP_MODEL}" == "${TARGET}" ]]; then
             DETECTED_DEVICE=true
         fi
     done
     for TARGET in ${DEVICE}; do
-        if [[ "${PROP_DEVICE}" == ${TARGET} ]]; then
+        if [[ "${PROP_DEVICE}" == "${TARGET}" ]]; then
             DETECTED_DEVICE=true
         fi
     done
     for TARGET in ${PRODUCT}; do
-        if [[ "${PROP_PRODUCT}" == ${TARGET} ]]; then
+        if [[ "${PROP_PRODUCT}" == "${TARGET}" ]]; then
             DETECTED_DEVICE=true
         fi
     done
     for TARGET in ${BRAND}; do
-        if [[ "${PROP_BRAND}" == ${TARGET} ]]; then
+        if [[ "${PROP_BRAND}" == "${TARGET}" ]]; then
             DETECTED_DEVICE=true
         fi
     done
     for TARGET in ${MANUFACTURER}; do
-        if [[ "${PROP_MANUFACTURER}" == ${TARGET} ]]; then
+        if [[ "${PROP_MANUFACTURER}" == "${TARGET}" ]]; then
             DETECTED_DEVICE=true
         fi
     done
@@ -141,7 +152,7 @@ check_magisk_version() {
         ui_print "- Special device detected"
     fi
     ui_print "- Magisk version: ${MAGISK_VER_CODE}"
-    [[ ${MAGISK_VER_CODE} -ge 20101 ]] || check_old_magisk_device ${MAGISK_VER_CODE}
+    [[ ${MAGISK_VER_CODE} -ge 20101 ]] || check_old_magisk_device "${MAGISK_VER_CODE}"
     [[ ${MAGISK_VER_CODE} -eq 20101 ]] && update_new_magisk
 }
 
@@ -180,7 +191,7 @@ check_android_version() {
     if [[ ${API} -ge 26 ]]; then
         ui_print "- Android sdk: ${API}"
     else
-        require_new_android ${API}
+        require_new_android "${API}"
     fi
 }
 
@@ -215,35 +226,87 @@ if [[ "${IS64BIT}" == false ]]; then
     rm -rf "${MODPATH}/system/lib64"
 fi
 
-if [[ ${BOOTMODE} == true && "$(pm path org.meowcat.edxposed.manager)" == "" ]]; then
+if [[ "$(pm path org.meowcat.edxposed.manager)" == "" && "$(pm path de.robv.android.xposed.installer)" == "" ]]; then
+    NO_MANAGER=true
+fi
+
+if [[ ${BOOTMODE} == true && ${NO_MANAGER} == true ]]; then
     ui_print "- Installing stub apk"
-    cp -f ${MODPATH}/EdXposed.apk /data/local/tmp/
+    cp -f "${MODPATH}/EdXposed.apk" /data/local/tmp/
     pm install /data/local/tmp/EdXposed.apk 2>&2
     rm -rf /data/local/tmp/EdXposed.apk
 fi
 
 if [[ "${OLD_MAGISK}" == true ]]; then
     ui_print "- Removing SEPolicy rule for old Magisk"
-    rm ${MODPATH}/sepolicy.rule
+    rm "${MODPATH}"/sepolicy.rule
 fi
 
-echo "- Mounted persist:" >&2
-mount | grep persist >&2
+#echo "- Mounted persist:" >&2
+#mount | grep persist >&2
 
 #if [[ "${NO_PERSIST}" == true ]]; then
 #    ui_print "- Persist not detected, remove SEPolicy rule"
 #    rm ${MODPATH}/sepolicy.rule
 #fi
 
+ui_print "- Copying framework libraries"
+
+mv "${MODPATH}/system/framework/eddalvikdx.jar" "${MODPATH}/system/framework/${JAR_EDDALVIKDX}"
+mv "${MODPATH}/system/framework/edxp.jar" "${MODPATH}/system/framework/${JAR_EDXP}"
+mv "${MODPATH}/system/framework/eddexmaker.jar" "${MODPATH}/system/framework/${JAR_EDDEXMAKER}"
+mv "${MODPATH}/system/framework/edconfig.jar" "${MODPATH}/system/framework/${JAR_EDCONFIG}"
+mv "${MODPATH}/system/lib/libriru_edxp.so" "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+mv "${MODPATH}/system/lib/libwhale.edxp.so" "${MODPATH}/system/lib/${LIB_WHALE_EDXP}"
+
+if [[ "${IS64BIT}" == true ]]; then
+    mv "${MODPATH}/system/lib64/libriru_edxp.so" "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
+    mv "${MODPATH}/system/lib64/libwhale.edxp.so" "${MODPATH}/system/lib64/${LIB_WHALE_EDXP}"
+fi
+
+if [[ "${VARIANTS}" == "SandHook" ]]; then
+    mv "${MODPATH}/system/lib/libsandhook.edxp.so" "${MODPATH}/system/lib/${LIB_SANDHOOK_EDXP}"
+    if [[ "${IS64BIT}" == true ]]; then
+        mv "${MODPATH}/system/lib64/libsandhook.edxp.so" "${MODPATH}/system/lib64/${LIB_SANDHOOK_EDXP}"
+    fi
+fi
+
+ui_print "- Resetting libraries path"
+
+sed -i 's:/system/framework/edxp.jar\:/system/framework/eddalvikdx.jar\:/system/framework/eddexmaker.jar:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+sed -i 's:libriru_edxp.so:'"${LIB_RIRU_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+sed -i 's:libwhale.edxp.so:'"${LIB_WHALE_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+sed -i 's:libsandhook.edxp.so:'"${LIB_SANDHOOK_EDXP}"':g' "${MODPATH}/system/lib/${LIB_RIRU_EDXP}"
+
+if [[ "${IS64BIT}" == true ]]; then
+    sed -i 's:/system/framework/edxp.jar\:/system/framework/eddalvikdx.jar\:/system/framework/eddexmaker.jar:/system/framework/'"${JAR_EDXP}"'\:/system/framework/'"${JAR_EDDALVIKDX}"'\:/system/framework/'"${JAR_EDDEXMAKER}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
+    sed -i 's:/system/framework/edconfig.jar:/system/framework/'"${JAR_EDCONFIG}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
+    sed -i 's:libriru_edxp.so:'"${LIB_RIRU_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
+    sed -i 's:libwhale.edxp.so:'"${LIB_WHALE_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
+    sed -i 's:libsandhook.edxp.so:'"${LIB_SANDHOOK_EDXP}"':g' "${MODPATH}/system/lib64/${LIB_RIRU_EDXP}"
+fi
+
+ui_print "- Removing old configuration"
+
+if [[ -f "${RIRU_MODULES}/edxp.prop" ]]; then
+    OLD_CONFIG=$(cat "${RIRU_MODULES}/edxp.prop")
+    rm -rf "${RIRU_MODULES}/${OLD_CONFIG}"
+fi
+
+if [[ -e "${RIRU_MODULES}/edxp" ]]; then
+    rm -rf "${RIRU_MODULES}/edxp"
+fi
+
 ui_print "- Copying extra files"
 
-TARGET="${RIRU_PATH}/modules/edxp"
+[[ -d "${RIRU_TARGET}" ]] || mkdir -p "${RIRU_TARGET}" || abort "! Can't mkdir -p ${RIRU_TARGET}"
 
-[[ -d "${TARGET}" ]] || mkdir -p "${TARGET}" || abort "! Can't mkdir -p ${TARGET}"
+echo "${RIRU_EDXP}">"${RIRU_MODULES}/edxp.prop"
 
-rm "${TARGET}/module.prop"
+rm "${RIRU_TARGET}/module.prop"
 
-cp "${MODPATH}/module.prop" "${TARGET}/module.prop" || abort "! Can't create ${TARGET}/module.prop"
+cp "${MODPATH}/module.prop" "${RIRU_TARGET}/module.prop" || abort "! Can't create ${RIRU_TARGET}/module.prop"
 
 set_perm_recursive "${MODPATH}" 0 0 0755 0644
 

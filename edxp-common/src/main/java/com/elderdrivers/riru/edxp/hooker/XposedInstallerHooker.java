@@ -1,5 +1,6 @@
 package com.elderdrivers.riru.edxp.hooker;
 
+import com.elderdrivers.riru.edxp.config.ConfigManager;
 import com.elderdrivers.riru.edxp.util.Utils;
 
 import java.io.File;
@@ -11,9 +12,9 @@ import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
-import static com.elderdrivers.riru.edxp.config.InstallerChooser.LEGACY_INSTALLER_PACKAGE_NAME;
-
 public class XposedInstallerHooker {
+
+    private static final String LEGACY_INSTALLER_PACKAGE_NAME = "de.robv.android.xposed.installer";
 
     public static void hookXposedInstaller(ClassLoader classLoader) {
         try {
@@ -37,7 +38,7 @@ public class XposedInstallerHooker {
                                 Utils.logD("reloadXposedProp already done, skip...");
                                 return;
                             }
-                            File file = new File("/system/framework/edconfig.jar");
+                            File file = new File(ConfigManager.getXposedPropPath());
                             FileInputStream is = null;
                             try {
                                 is = new FileInputStream(file);
