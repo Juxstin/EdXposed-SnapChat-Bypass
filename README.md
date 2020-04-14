@@ -47,7 +47,7 @@ CHECK Build requirements ABOVE
 - File access services are not implemented yet, now EdXp simply uses magiskpolicy to enable needed SELinux policies.
 
 ## Sponsored
-- My discord: [Join Discord](https://discord.gg/ArMW3ex)
+- My discord: [Join Discord](https://discord.gg/F6MJvZX)
 
 ## Get help
 - GitHub issues (recommended): [Issues](https://github.com/Juxstin/EdXposed-SnapChat-Bypass/issues/)
